@@ -11,6 +11,9 @@ class MyUpbit(pyupbit.Upbit):
     def __init__(self, access, secret):
         pyupbit.Upbit.__init__(self, access=access, secret=secret)
 
+    def _get_balance(self, ticker):
+        return self.get_balance(ticker)
+
     def _get_balances(self):
         balances = self.get_balances()
         out = []

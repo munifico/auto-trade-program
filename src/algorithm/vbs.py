@@ -29,6 +29,11 @@ class Vbs(MyUpbit, threading.Thread):
         t_exit = self.t_next.replace(
             hour=9, minute=50, second=0, microsecond=0)
 
+        ticker_balance = self._get_balance(ticker=self.ticker)
+        if ticker_balance != 0:
+            self.hold = True
+            self.sold = False
+
         i = 0
         while True:
             t_now = datetime.now()

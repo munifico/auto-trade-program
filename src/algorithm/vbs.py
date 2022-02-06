@@ -21,7 +21,6 @@ class Vbs(MyUpbit, threading.Thread):
         self.sold = False
 
     def run(self):
-        # try:
         print_date('[VBS] ', self.ticker, ' 프로그램을 시작합니다.')
         t_buy = self.t_start.replace(
             hour=10, minute=5, second=0, microsecond=0)
@@ -78,9 +77,6 @@ class Vbs(MyUpbit, threading.Thread):
 
         print_date('[VBS] ', self.ticker, '프로그램을 종료합니다.')
         print_json(self._get_balances(), '잔고')
-
-        # except Exception as e:
-        #     print_date('[VBS] ', self.ticker, ' 에러 발생', e)
 
     def set_target_price(self):
         print_date('[VBS] ', self.ticker, '의 목표가를 설정합니다.')

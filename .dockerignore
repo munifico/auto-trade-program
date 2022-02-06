@@ -1,0 +1,11 @@
+.git
+*/__pycache__
+.vscode
+
+.env
+.gitignore
+.dockerignore
+
+Dockerfile
+
+.DS_Store

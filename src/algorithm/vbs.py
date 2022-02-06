@@ -68,7 +68,7 @@ class Vbs(MyUpbit, threading.Thread):
             if t_exit < t_now:
                 break
 
-            if i == 5:
+            if i == 180:
                 i = 0
                 self.print_status()
 

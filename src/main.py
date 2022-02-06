@@ -1,10 +1,11 @@
-import sys
-from vbs import run as vbs_run
+
+from public.env import load_env
+from algorithms.vbs import Vbs
+
 
 if __name__ == '__main__':
-    ticker = sys.argv[1]
-    if not ticker or ticker == None:
-        print('티커를 입력하세요.')
-        sys.exit(1)
+    UPBIT_ACCESS, UPBIT_SECRET = load_env()
 
-    vbs_run(ticker)
+    vbs_btc = Vbs(access=UPBIT_ACCESS, secret=UPBIT_SECRET, ticker='KRW-CHZ')
+
+    vbs_btc.start()

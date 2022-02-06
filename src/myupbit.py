@@ -1,10 +1,10 @@
+import warnings
+from utils import dict_to_df, print_df, print_date
+from datetime import datetime, timedelta
+import pyupbit
 import time
 import pandas as pd
 pd.options.display.float_format = '{:.5f}'.format
-import pyupbit
-from datetime import datetime, timedelta
-from utils import dict_to_df, print_df, print_date
-import warnings
 warnings.filterwarnings(action='ignore')
 
 
@@ -48,8 +48,7 @@ class MyUpbit:
         df_yes = df.loc[self.t_prev.strftime('%Y-%m-%d 10:00:00')]
 
         range = df_yes['high'] - df_yes['low']
-        self.target_price =  df_today['open'] + range * 0.5
-        
+        self.target_price = df_today['open'] + range * 0.5
 
         print_date('[VBS] ', self.ticker, ' 목표가: ', self.target_price)
 
@@ -58,17 +57,17 @@ class MyUpbit:
 
     def buy_market_order(self):
         cash = self.upbit.get_balance()
-        
+
         try:
             res = self.upbit.buy_market_order(self.ticker, cash * 0.9995)
             res_df = dict_to_df(res)
             print_df(res_df, self.ticker, ' 매수 주문 완료')
-            
+
             time.sleep(1)
-        
+
             while True:
                 order = self.upbit.get_order(res['uuid'])
-                
+
                 if order != None and len(order['trades']) > 0:
                     order_df = dict_to_df(order)
                     volume = self.upbit.get_balance(self.ticker)
@@ -76,51 +75,45 @@ class MyUpbit:
                     if volume == None:
                         continue
 
-                    print_df(order_df, self.ticker, '(', volume, ')', ' 매수 주문 처리 완료')
+                    print_df(order_df, self.ticker,
+                             '(', volume, ')', ' 매수 주문 처리 완료')
                     return True
                 else:
-                    print_df(self.ticker, ' 매수 주문 처리 대기 중...')                
+                    print_df(self.ticker, ' 매수 주문 처리 대기 중...')
                     time.sleep(0.5)
-        except: 
+        except:
             print_date(self.ticker, ' 매수 주문 실패')
             return False
-            
+
     def sell_market_order(self):
         volume = self.upbit.get_balance(self.ticker)
-        
+
         if volume == None:
             return False
-        
+
         try:
             res = self.upbit.sell_market_order(self.ticker, volume)
-            
+
             res_df = dict_to_df(res)
             print_df(res_df, self.ticker, ' 매도 주문 완료')
-            
+
             time.sleep(1)
-            
+
             while True:
                 order = self.upbit.get_order(res['uuid'])
                 if order != None and len(order['trades']) > 0:
                     order_df = dict_to_df(order)
-                    
+
                     cash = self.upbit.get_balance()
 
                     if cash == None:
                         continue
-                    
+
                     print_df(order_df, self.ticker, ' 매도 주문 처리 완료')
                     return True
                 else:
                     print_df(self.ticker, ' 매수 주문 처리 대기 중...')
-                    time.sleep(0.5)      
+                    time.sleep(0.5)
         except:
             print_date(self.ticker, ' 매도 주문 실패')
             return False
-        
-            
-        
-        
-            
-        
-        

@@ -1,5 +1,5 @@
 import sys
-import time
+from algorithm.one_per_gap.one_per_gap import one_per_gap_start
 from public.env import load_env
 from algorithm.vbs import Vbs
 
@@ -17,3 +17,6 @@ if __name__ == '__main__':
     if algorithm == 'vbs':
         vbs = Vbs(access=UPBIT_ACCESS, secret=UPBIT_SECRET, ticker=ticker)
         vbs.start()
+    elif algorithm == 'one_per_gap':
+        one_per_gap_start(access=UPBIT_ACCESS,
+                          secret=UPBIT_SECRET, ticker=ticker)

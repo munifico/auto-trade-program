@@ -1,13 +1,11 @@
-import threading
 import time
 from public.my_upbit import MyUpbit
 from datetime import datetime, timedelta
 from public.utils import print_date, print_json
 
 
-class Vbs(MyUpbit, threading.Thread):
+class Vbs(MyUpbit):
     def __init__(self, access, secret, ticker):
-        threading.Thread.__init__(self)
         MyUpbit.__init__(self, access, secret)
 
         self.t_start = datetime.now()

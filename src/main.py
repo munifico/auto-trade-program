@@ -1,4 +1,3 @@
-from algorithm.vbs import Vbs
 from dotenv import load_dotenv
 import os
 from vb import Vb

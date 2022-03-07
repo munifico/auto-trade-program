@@ -1,8 +1,12 @@
 import warnings
+
+from numpy import minimum
 from public.utils import print_date, print_json
 import pyupbit
 import time
+from datetime import datetime, timedelta
 import pandas as pd
+
 pd.options.display.float_format = '{:.5f}'.format
 warnings.filterwarnings(action='ignore')
 
@@ -37,15 +41,30 @@ class MyUpbit(pyupbit.Upbit):
             'open': 'first', 'high': 'max', 'low': 'min', 'close': 'last', 'volume': 'sum', 'value': 'sum'
         })
 
+    def _get_ohlcv_range_base(self, ticker, date, start, elapse):
+        df = self._get_ohlcv(
+            ticker=ticker, interval="minute60", to=date, count=elapse)
+
+        df = df.resample('24H', base=start).agg({
+            'open': 'first',
+            'high': 'max',
+            'low': 'min',
+            'close': 'last',
+            'volume': 'sum',
+            'value': 'sum'
+        })
+
+        return df
+
     def _get_current_price(self, ticker, limit_info=False, verbose=False):
         return pyupbit.get_current_price(ticker=ticker, limit_info=limit_info, verbose=verbose)
 
-    def _buy_market_order(self, ticker):
+    def _buy_market_order(self, ticker, ratio):
         cash = self.get_balance()
         if cash == None:
             raise Exception('잔고를 확인할 수 없습니다.')
 
-        res = self.buy_market_order(ticker, cash * 0.9995)
+        res = self.buy_market_order(ticker, cash * ratio * 0.9995)
 
         if res == None or 'error' in res:
             raise Exception()
